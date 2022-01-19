@@ -103,6 +103,11 @@ credits = [
     'Apache',
     'https://www.apache.org/licenses/LICENSE-2.0'
   ], [
+    'Apache APISIX',
+    '2019-2021 The Apache Software Foundation.',
+    'Apache 2.0 License',
+    'https://raw.githubusercontent.com/apache/apisix/master/LICENSE'
+  ], [
     'Async',
     '2010-2018 Caolan McMahon',
     'MIT',
@@ -463,6 +468,11 @@ credits = [
     'MIT',
     'https://raw.githubusercontent.com/JuliaLang/julia/master/LICENSE.md'
   ], [
+    'Kafka',
+    '2017 Apache Software Foundation <br>Apache Kafka, Kafka, and the Kafka logo are either registered trademarks or trademarks of The Apache Software Foundation.',
+    'Apache-2.0 License',
+    'https://raw.githubusercontent.com/apache/kafka/trunk/LICENSE'
+  ], [
     'Knockout.js',
     'Steven Sanderson, the Knockout.js team, and other contributors',
     'MIT',
@@ -472,6 +482,11 @@ credits = [
     '2020 Koa contributors',
     'MIT',
     'https://raw.githubusercontent.com/koajs/koa/master/LICENSE'
+  ], [
+    'Kong',
+    '2016-2022 Kong Inc',
+    'Apache-2.0 License',
+    'https://raw.githubusercontent.com/Kong/kong/master/LICENSE'
   ], [
     'Kotlin',
     '2010-2020 JetBrains s.r.o. and Kotlin Programming Language contributors',
@@ -722,6 +737,11 @@ credits = [
     '1999–2012 R Foundation for Statistical Computing',
     'GPL',
     'https://svn.r-project.org/R/trunk/COPYING'
+  ], [
+    'Rabbitmq',
+    '2007-2021 VMware, Inc',
+    'MPL',
+    'https://raw.githubusercontent.com/rabbitmq/rabbitmq-server/master/LICENSE-MPL-RabbitMQ'
   ], [
     'Ramda',
     '2013-2020 Scott Sauyet and Michael Hurley',
