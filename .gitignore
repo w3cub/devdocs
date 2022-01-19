@@ -2,7 +2,6 @@
 .bundle
 log
 tmp
-list.txt
 public/assets
 public/fonts
 public/docs/**/*

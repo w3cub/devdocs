@@ -18,18 +18,7 @@ Keep track of development news:
 
 ## Quick Start
 
-
-
-rvm use
-
-```
-bash --login
-rvm list
-rvm use 2.5.1 # version
-
-```
 Unless you wish to contribute to the project, we recommend using the hosted version at [devdocs.io](https://devdocs.io). It's up-to-date and works offline out-of-the-box.
-
 
 DevDocs is made of two pieces: a Ruby scraper that generates the documentation and metadata, and a JavaScript app powered by a small Sinatra app.
 

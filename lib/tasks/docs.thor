@@ -35,7 +35,7 @@ class DocsCLI < Thor
     end
 
     output = names.join("\n")
-    File.write('./list.txt', output)
+    File.write('./log/docs_list.txt', output)
 
     require 'tty-pager'
     TTY::Pager.new.page(output)
