@@ -140,6 +140,17 @@ module Docs
       Documentation Distributed under CC BY 4.0.
     HTML
 
+    # latest version has a special URL that does not include the version identifier
+    version do
+      self.release = "1.26"
+      self.base_url = "https://kubernetes.io/docs/reference/kubernetes-api/"
+    end
+
+    version '1.20' do
+      self.release = "#{version}"
+      self.base_url = "https://v#{version.sub('.', '-')}.docs.kubernetes.io/docs/reference/kubernetes-api/"
+    end
+
     def get_latest_version(opts)
       doc = fetch_doc('https://kubernetes.io/releases/', opts)
       doc.at_css('.td-content > h3:first-child').content

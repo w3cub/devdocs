@@ -36,12 +36,16 @@ module Docs
     ]
 
     options[:attribution] = <<-HTML
-      &copy; 2010&ndash;2022 Ericsson AB<br>
+      &copy; 2010&ndash;2023 Ericsson AB<br>
       Licensed under the Apache License, Version 2.0.
     HTML
 
+    version '26' do
+      self.release = '26.0.1'
+    end
+
     version '25' do
-      self.release = '25.0'
+      self.release = '25.3.2.2'
     end
 
     version '24' do

@@ -5,6 +5,11 @@ module Docs
         @doc = at_css('article > section')
 
         css('.anchor-link').remove
+        css('.avatar-list').remove
+
+        css('header > h1').each do |node|
+          node.parent.before(node).remove
+        end
 
         css('pre').each do |node|
           node.content = node.css('.line').map(&:content).join("\n")
@@ -20,6 +25,10 @@ module Docs
         css('figure').each do |node|
           node.before(node.children).remove
         end
+
+        css('.cms-nav').remove
+
+        css('.copy-button-wrapper, .copy-button-tooltip').remove
 
         doc
       end

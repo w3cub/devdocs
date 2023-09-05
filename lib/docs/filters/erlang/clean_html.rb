@@ -7,6 +7,7 @@ module Docs
         # frontpage
 
         css('center:last-child').remove # copyright
+        css('.footer').remove # copyright
 
         css('center', '.example').each do |node|
           node.before(node.children).remove

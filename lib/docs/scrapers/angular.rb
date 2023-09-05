@@ -15,7 +15,7 @@ module Docs
     options[:max_image_size] = 256_000
 
     options[:attribution] = <<-HTML
-      &copy; 2010&ndash;2022 Google, Inc.<br>
+      &copy; 2010&ndash;2023 Google, Inc.<br>
       Licensed under the Creative Commons Attribution License 4.0.
     HTML
 
@@ -83,8 +83,20 @@ module Docs
     end
 
     version do
-      self.release = '14.2.0'
+      self.release = '16.1.3'
       self.base_url = 'https://angular.io/'
+      include Docs::Angular::Since12
+    end
+
+    version '15' do
+      self.release = '15.2.9'
+      self.base_url = 'https://angular.io/'
+      include Docs::Angular::Since12
+    end
+
+    version '14' do
+      self.release = '14.2.12'
+      self.base_url = 'https://v14.angular.io/'
       include Docs::Angular::Since12
     end
 

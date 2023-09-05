@@ -4,26 +4,16 @@ This lists the docs that use `FileScraper` and instructions for building some of
 
 If you open a PR to update one of these docs, please add/fix the instructions.
 
-## C
-
-Download the HTML book from https://en.cppreference.com/w/Cppreference:Archives
-and copy `reference/en/c` from the ZIP file into `/path/to/devdocs/docs/c`.
-
-## C++
-
-Download the HTML book from https://en.cppreference.com/w/Cppreference:Archives
-and copy `reference/en/cpp` from the ZIP file into `/path/to/devdocs/docs/cpp`.
-
 ## Dart
 
 Click the “API docs” link under the “Stable channel” header on
 https://www.dartlang.org/tools/sdk/archive. Rename the expanded ZIP to `dart~2`
-and put it in `/path/to/devdocs/docs/`
+and put it in `docs/`
 
 Or run the following commands in your terminal:
 
 ```sh
-curl https://storage.googleapis.com/dart-archive/channels/stable/release/$RELEASE/api-docs/dartdocs-gen-api-zip > dartApi.zip; \
+curl https://storage.googleapis.com/dart-archive/channels/stable/release/$RELEASE/api-docs/dartdocs-gen-api.zip > dartApi.zip; \
 unzip dartApi.zip; mv gen-dartdocs docs/dart~$VERSION
 ```
 
@@ -51,12 +41,12 @@ bsdtar --extract --file - --directory=docs/django\~$VERSION/
 
 ## Elisp
 
-Go to https://www.gnu.org/software/emacs/manual/elisp.html, download the HTML tarball and extract its content in `/path/to/devdocs/docs/elisp` or run the following command:
+Go to https://www.gnu.org/software/emacs/manual/elisp.html, download the HTML tarball and extract its content in `docs/elisp` or run the following command:
 
 ```sh
-mkdir /path/to/devdocs/docs/elisp \
+mkdir docs/elisp \
 && curl curl https://www.gnu.org/software/emacs/manual/elisp.html_node.tar.gz | \
-tar --extract --gzip --strip-components=1 --directory=/path/to/devdocs/docs/elisp
+tar --extract --gzip --strip-components=1 --directory=docs/elisp
 ```
 
 ## Erlang
@@ -65,19 +55,19 @@ Go to https://www.erlang.org/downloads and download the HTML documentation file.
 
 ```ah
 mkdir --parent docs/erlang\~$VERSION/; \
-curl http://erlang.org/download/otp_doc_html_$RELEASE.tar.gz | \
+curl -L https://github.com/erlang/otp/releases/download/OTP-$RELEASE/otp_doc_html_$RELEASE.tar.gz | \
 bsdtar --extract --file - --directory=docs/erlang\~$VERSION/
 ```
 
 ## Gnu
 
 ### Bash
-Go to https://www.gnu.org/software/bash/manual/, download the HTML tar file (with one web page per node) and extract its content in `/path/to/devdocs/docs/bash` or run the following command:
+Go to https://www.gnu.org/software/bash/manual/, download the HTML tar file (with one web page per node) and extract its content in `docs/bash` or run the following command:
 
 ```sh
-mkdir /path/to/devdocs/docs/bash \
+mkdir docs/bash \
 && curl https://www.gnu.org/software/bash/manual/bash.html_node.tar.gz | \
-tar --extract --gzip --directory=/path/to/devdocs/docs/bash
+tar --extract --gzip --directory=docs/bash
 ```
 
 ### GCC
@@ -105,12 +95,12 @@ tar --extract --gzip --strip-components=1 --directory=docs/gnu_fortran~$VERSION
 ```
 
 ## GNU Make
-Go to https://www.gnu.org/software/make/manual/, download the HTML tarball and extract its content in `/path/to/devdocs/docs/gnu_make` or run the following command:
+Go to https://www.gnu.org/software/make/manual/, download the HTML tarball and extract its content in `docs/gnu_make` or run the following command:
 
 ```sh
-mkdir /path/to/devdocs/docs/gnu_make \
+mkdir docs/gnu_make \
 && curl https://www.gnu.org/software/make/manual/make.html_node.tar.gz | \
-tar --extract --gzip --strip-components=1 --directory=/path/to/devdocs/docs/gnu_make
+tar --extract --gzip --strip-components=1 --directory=docs/gnu_make
 ```
 
 ## Gnuplot
@@ -164,7 +154,7 @@ bsdtar --extract --file=- --directory=docs/numpy~$VERSION/
 
 Download from https://www.ocaml.org/docs/ the HTML reference:
 https://v2.ocaml.org/releases/4.14/ocaml-4.14-refman-html.tar.gz
-and extract it as `/path/to/devdocs/docs/ocaml`:
+and extract it as `docs/ocaml`:
 
 ```sh
 curl https://v2.ocaml.org/releases/$VERSION/ocaml-$VERSION-refman-html.tar.gz | \
@@ -226,7 +216,7 @@ tar xj --strip-components=1
 
 ## R
 ```bash
-DEVDOCSROOT=/path/to/devdocs/docs/r
+DEVDOCSROOT=docs/r
 RLATEST=https://cran.r-project.org/src/base/R-latest.tar.gz # or /R-${VERSION::1}/R-$VERSION.tar.gz
 
 RSOURCEDIR=${TMPDIR:-/tmp}/R/latest
@@ -279,8 +269,8 @@ See `lib/docs/scrapers/scala.rb`
 ## SQLite
 
 Download the docs from https://sqlite.org/download.html, unzip it, and rename
-it to `/path/to/devdocs/docs/sqlite`
+it to `docs/sqlite`
 
 ```sh
-curl https://sqlite.org/2022/sqlite-doc-3390200.zip | bsdtar --extract --file - --directory=docs/sqlite/ --strip-components=1
+curl https://sqlite.org/2022/sqlite-doc-3400000.zip | bsdtar --extract --file - --directory=docs/sqlite/ --strip-components=1
 ```

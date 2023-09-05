@@ -2,12 +2,21 @@ module Docs
   class Http < Mdn
     include MultipleBaseUrls
 
-    # release = '2022-09-21'
+    # release = '2022-11-17'
     self.name = 'HTTP'
     self.base_urls = [
       'https://developer.mozilla.org/en-US/docs/Web/HTTP',
       'https://datatracker.ietf.org/doc/html/',
     ]
+    self.links = {
+      home: 'https://developer.mozilla.org/en-US/docs/Web/HTTP',
+      code: 'https://github.com/mdn/content/tree/main/files/en-us/web/http'
+    }
+
+    options[:attribution] = <<-HTML
+      &copy; 2005&ndash;2023 MDN contributors.<br>
+      Licensed under the Creative Commons Attribution-ShareAlike License v2.5 or later.
+    HTML
 
     html_filters.push 'http/clean_html', 'http/entries', 'title'
 
@@ -19,7 +28,7 @@ module Docs
       filter.current_url.host == 'datatracker.ietf.org' ? '.content' : Docs::Mdn.options[:container]
     end
     options[:skip_links] = ->(filter) do
-      filter.current_url.host == 'datatracker.ietf.org' ? true : false
+      filter.current_url.host == 'datatracker.ietf.org'
     end
     options[:replace_paths] = { '/Access_control_CORS' => '/CORS' }
     options[:fix_urls] = ->(url) do

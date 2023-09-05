@@ -2,13 +2,8 @@ module Docs
   class Vue
     class CleanHtmlFilter < Filter
       def call
-        if current_url.host == 'vitejs.dev'
-          return '<h1>Vite</h1>' if root_page?
-          @doc = at_css('.content > div')
-        else
-          return '<h1>Vue.js</h1>' if root_page?
-          @doc = at_css(version == '3' ? 'main > div > div' : '.content')
-        end
+        return '<h1>Vue.js</h1>' if root_page?
+        @doc = at_css(version == '3' ? 'main > div > div' : '.content')
 
         at_css('h1').content = 'Vue.js' if root_page?
         doc.child.before('<h1>Vue.js API</h1>') if slug == 'api/' || slug == 'api/index'
@@ -23,12 +18,23 @@ module Docs
 
         # Remove code highlighting
         css('.line-numbers-wrapper').remove
-        css('pre').each do |node|
-          node.parent.name = 'pre'
-          node.parent['data-language'] = node.parent['class'][/language-(\w+)/, 1]
-          node.parent['data-language'] = 'javascript' if node.parent['data-language'][/vue/] # unsupported by prism.js
-          node.parent.remove_attribute 'class'
-          node.parent.content = node.content.strip
+        if version == '3'
+          css('pre').each do |node|
+            node.parent.name = 'pre'
+            node.parent['data-language'] = node.parent['class'][/language-(\w+)/, 1]
+            node.parent['data-language'] = 'javascript' if node.parent['data-language'][/vue/] # unsupported by prism.js
+            node.parent.remove_attribute 'class'
+            node.parent.content = node.content.strip
+          end
+        else
+          css('pre').each do |node|
+            parent = node.ancestors('figure')[0]
+            parent.name = 'pre'
+            parent['data-language'] = parent['class'][/(html|js)/, 1]
+            parent.remove_attribute 'class'
+            node.css('br').each{ |br| br.replace "\n" }
+            parent.content = node.content.strip
+          end
         end
 
         css('.vue-mastery-link').remove
