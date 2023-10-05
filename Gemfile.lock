@@ -171,7 +171,7 @@ DEPENDENCIES
   sprockets-helpers
   sprockets-sass
   terminal-table
-  thin (~> 1.8.0)
+  thin
   thor
   tty-pager
   typhoeus

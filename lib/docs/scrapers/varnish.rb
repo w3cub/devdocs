@@ -12,7 +12,7 @@ module Docs
 
     html_filters.push 'varnish/entries', 'sphinx/clean_html'
 
-    options[:container] = '.body > .section'
+    options[:container] = '.body > section'
 
 
     options[:skip] = %w(genindex.html search.html)
@@ -27,8 +27,8 @@ module Docs
     HTML
 
     version do
-      self.release = '6.5.0'
-      self.base_url = 'https://varnish-cache.org/docs/6.5/'
+      self.release = '7.3.0'
+      self.base_url = 'https://varnish-cache.org/docs/7.3/'
     end
 
     def get_latest_version(opts)
