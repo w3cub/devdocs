@@ -19,8 +19,9 @@ module Docs
           node.before(node.children).remove
         end
 
-        css('div > ul').each do |node|
-          node.parent.before(node.parent.children).remove
+        parents = css('div > ul').map(&:parent).uniq
+        parents.each do |parent|
+          parent.before(parent.children).remove
         end
 
         css('dl > dd:first-child:last-child > ul:first-child:last-child').each do |node|
@@ -57,7 +58,7 @@ module Docs
           node.content = ' ' if node.content.empty?
         end
 
-        css('tt', 'span > span.source-cpp', 'span.t-c', 'span.t-lc', 'span.t-dsc-see-tt').each do |node|
+        css('tt', 'span > span.source-cpp', 'span.t-c', 'span.t-lc', 'span.t-dsc-see-tt', 'div.t-li1 > span.source-cpp', 'div.t-li2 > span.source-cpp', 'div.t-li3 > span.source-cpp').each do |node|
           node.name = 'code'
           node.remove_attribute('class')
           node.content = node.content unless node.at_css('a')
@@ -82,7 +83,6 @@ module Docs
             node << node.next
           end
           node.inner_html = node.inner_html.strip
-          node << '.' if node.content =~ /[a-zA-Z0-9\)]\z/
           node.remove if node.content.blank? && !node.at_css('img')
         end
 
@@ -107,6 +107,16 @@ module Docs
 
         css('img').each do |node|
           node['src'] = node['src'].sub! %r{https://upload.cppreference.com/mwiki/(images/[^"']+?)}, 'http://upload.cppreference.com/mwiki/\1'
+        end
+
+        css('.t-su.t-su-b').each do |node|
+          node.inner_html = node.inner_html.gsub('<br>', '')
+          node.name = 'sub'
+        end
+
+        css('.t-su:not(.t-su-b)').each do |node|
+          node.inner_html = node.inner_html.gsub('<br>', '')
+          node.name = 'sup'
         end
 
         # temporary solution due lack of mathjax/mathml support

@@ -22,7 +22,7 @@ Unless you wish to contribute to the project, we recommend using the hosted vers
 
 DevDocs is made of two pieces: a Ruby scraper that generates the documentation and metadata, and a JavaScript app powered by a small Sinatra app.
 
-DevDocs requires Ruby 3.2.1, libcurl, and a JavaScript runtime supported by [ExecJS](https://github.com/rails/execjs#readme) (included in OS X and Windows; [Node.js](https://nodejs.org/en/) on Linux). Once you have these installed, run the following commands:
+DevDocs requires Ruby 3.3.0 (defined in [`Gemfile`](./Gemfile)), libcurl, and a JavaScript runtime supported by [ExecJS](https://github.com/rails/execjs#readme) (included in OS X and Windows; [Node.js](https://nodejs.org/en/) on Linux). Once you have these installed, run the following commands:
 
 ```sh
 git clone https://github.com/freeCodeCamp/devdocs.git && cd devdocs
@@ -53,12 +53,12 @@ docker run --name devdocs -d -p 9292:9292 thibaut/devdocs
 
 DevDocs aims to make reading and searching reference documentation fast, easy and enjoyable.
 
-The app's main goals are to: 
+The app's main goals are to:
 
 * Keep load times as short as possible
 * Improve the quality, speed, and order of search results
 * Maximize the use of caching and other performance optimizations
-* Maintain a clean and readable user interface 
+* Maintain a clean and readable user interface
 * Be fully functional offline
 * Support full keyboard navigation
 * Reduce “context switch” by using a consistent typography and design across all documentations
@@ -126,7 +126,7 @@ thor docs:clean     # Delete documentation packages
 thor console        # Start a REPL
 thor console:docs   # Start a REPL in the "Docs" module
 
-# Tests can be run quickly from within the console using the "test" command. 
+# Tests can be run quickly from within the console using the "test" command.
 # Run "help test" for usage instructions.
 thor test:all       # Run all tests
 thor test:docs      # Run "Docs" tests
@@ -175,10 +175,11 @@ Made something cool? Feel free to open a PR to add a new row to this table! You 
 | [romainl/vim-devdocs](https://github.com/romainl/vim-devdocs)                               | Vim plugin                           | ![Latest GitHub commit](https://img.shields.io/github/last-commit/romainl/vim-devdocs?logo=github&label)             | ![GitHub stars](https://img.shields.io/github/stars/romainl/vim-devdocs?logo=github&label)             |
 | [waiting-for-dev/vim-www](https://github.com/waiting-for-dev/vim-www)                       | Vim plugin                           | ![Latest GitHub commit](https://img.shields.io/github/last-commit/waiting-for-dev/vim-www?logo=github&label)         | ![GitHub stars](https://img.shields.io/github/stars/waiting-for-dev/vim-www?logo=github&label)         |
 | [luckasRanarison/nvim-devdocs](https://github.com/luckasRanarison/nvim-devdocs)             | Neovim plugin                        | ![Latest GitHub commit](https://img.shields.io/github/last-commit/luckasRanarison/nvim-devdocs?logo=github&label)    | ![GitHub stars](https://img.shields.io/github/stars/luckasRanarison/nvim-devdocs?logo=github&label)    |
+| [toiletbril/dedoc](https://github.com/toiletbril/dedoc)                                     | Terminal based viewer                | ![Latest GitHub commit](https://img.shields.io/github/last-commit/toiletbril/dedoc?logo=github&label)                | ![GitHub stars](https://img.shields.io/github/stars/toiletbril/dedoc?logo=github&label)                |
 
 ## Copyright / License
 
-Copyright 2013–2023 Thibaut Courouble and [other contributors](https://github.com/freeCodeCamp/devdocs/graphs/contributors)
+Copyright 2013–2024 Thibaut Courouble and [other contributors](https://github.com/freeCodeCamp/devdocs/graphs/contributors)
 
 This software is licensed under the terms of the Mozilla Public License v2.0. See the [COPYRIGHT](./COPYRIGHT) and [LICENSE](./LICENSE) files.
 

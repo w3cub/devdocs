@@ -56,7 +56,6 @@ class App < Sinatra::Application
 
     SpritesCLI.new.invoke(:generate, [], :disable_optimization => true)
 
-    require 'active_support/per_thread_registry'
     require 'active_support/cache'
     sprockets.cache = ActiveSupport::Cache.lookup_store :file_store, root.join('tmp', 'cache', 'assets', environment.to_s)
   end
@@ -94,7 +93,7 @@ class App < Sinatra::Application
         ['/manifest.json',  { 'Cache-Control' => 'public, max-age=86400'  }]
       ]
 
-    sprockets.js_compressor = Uglifier.new output: { beautify: true, indent_level: 0 }
+    sprockets.js_compressor = Terser.new
     sprockets.css_compressor = :sass
 
     Sprockets::Helpers.configure do |config|
