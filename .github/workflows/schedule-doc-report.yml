@@ -6,12 +6,12 @@ on:
 
 jobs:
   report:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     if: github.repository == 'freeCodeCamp/devdocs'
     steps:
     - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
     - name: Set up Ruby
-      uses: ruby/setup-ruby@432702e864cadc1b56247e31aa341be5be3e129a # v1.168.0
+      uses: ruby/setup-ruby@09a7688d3b55cf0e976497ff046b70949eeaccfd # v1.288.0
       with:
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - name: Generate report

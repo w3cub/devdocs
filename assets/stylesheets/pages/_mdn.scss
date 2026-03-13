@@ -28,9 +28,18 @@
 
   p > code, li > code { @extend %label; }
 
+  details { @extend %note; @extend %box; }
+  details.baseline-indicator.not { @extend %note; @extend %note-gray; }
+  details.baseline-indicator.low { @extend %note; @extend %note-blue; }
+  details.baseline-indicator.high { @extend %note; @extend %note-green; }
+  summary > div { display: inline; }
+  summary .status-title { font-weight: bold; }
+
   > .note,
   .notecard, // MDN 2021
-  .notice,
+  .notice {
+    @extend %note; @extend %note-blue;
+  }
   .warning,
   .overheadIndicator,
   .blockIndicator,
@@ -117,6 +126,7 @@
   }
 
   .bc-supports-yes, .bc-supports-yes + dd, .bc-supports-yes + dd + dd { background: var(--noteGreenBackground); }
+  .bc-supports-preview, .bc-supports-preview + dd, .bc-supports-preview + dd + dd { background: var(--noteBlueBackground); }
   .bc-supports-unknown, .bc-supports-unknown + dd, .bc-supports-unknown + dd + dd { background: var(--noteBackground); }
   .bc-supports-partial, .bc-supports-partial + dd, .bc-supports-partial + dd + dd { background: var(--noteOrangeBackground); }
   .bc-supports-no, .bc-supports-no + dd, .bc-supports-no + dd + dd { background: var(--noteRedBackground); }

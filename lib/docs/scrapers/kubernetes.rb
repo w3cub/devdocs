@@ -136,20 +136,40 @@ module Docs
     }
 
     options[:attribution] = <<-HTML
-      &copy; 2022 The Kubernetes Authors<br>
-      Documentation Distributed under CC BY 4.0.
+      &copy; 2025 The Kubernetes Authors | Documentation Distributed under CC BY 4.0 <br>
+      Copyright &copy; 2025 The Linux Foundation ®. All rights reserved.
     HTML
 
     # latest version has a special URL that does not include the version identifier
     version do
-      self.release = "1.26"
+      self.release = "1.33.1"
       self.base_url = "https://kubernetes.io/docs/reference/kubernetes-api/"
     end
 
-    version '1.20' do
+    version '1.28' do
       self.release = "#{version}"
       self.base_url = "https://v#{version.sub('.', '-')}.docs.kubernetes.io/docs/reference/kubernetes-api/"
     end
+
+    version '1.27' do
+      self.release = "#{version}"
+      self.base_url = "https://v#{version.sub('.', '-')}.docs.kubernetes.io/docs/reference/kubernetes-api/"
+    end
+
+   version '1.26' do
+      self.release = "#{version}"
+      self.base_url = "https://v#{version.sub('.', '-')}.docs.kubernetes.io/docs/reference/kubernetes-api/"
+   end
+
+   version '1.25' do
+      self.release = "#{version}"
+      self.base_url = "https://v#{version.sub('.', '-')}.docs.kubernetes.io/docs/reference/kubernetes-api/"
+   end
+
+   version '1.24' do
+      self.release = "#{version}"
+      self.base_url = "https://v#{version.sub('.', '-')}.docs.kubernetes.io/docs/reference/kubernetes-api/"
+   end
 
     def get_latest_version(opts)
       doc = fetch_doc('https://kubernetes.io/releases/', opts)

@@ -24,6 +24,9 @@ module Docs
           node.remove
         end
 
+        css('.vp-code-group > .tabs').remove
+
+        css('.lang').remove
         css('.line-numbers-wrapper').remove
         css('pre').each do |node|
           node.content = node.content.strip

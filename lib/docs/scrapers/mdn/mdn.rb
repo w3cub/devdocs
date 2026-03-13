@@ -10,7 +10,7 @@ module Docs
     html_filters.insert_before 'container', 'mdn/compat_tables' # needs access to <script type="application/json" id="hydration">
     html_filters.push 'mdn/clean_html'
 
-    options[:container] = '#content > .main-page-content'
+    options[:container] = '#content'
     options[:trailing_slash] = false
 
     options[:skip_link] = ->(link) {
@@ -18,7 +18,7 @@ module Docs
     }
 
     options[:attribution] = <<-HTML
-      &copy; 2005&ndash;2023 MDN contributors.<br>
+      &copy; 2005&ndash;2025 MDN contributors.<br>
       Licensed under the Creative Commons Attribution-ShareAlike License v2.5 or later.
     HTML
 

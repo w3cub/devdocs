@@ -162,9 +162,8 @@ class DocsCLI < Thor
   desc 'upload', '[private]'
   option :dryrun, type: :boolean
   option :packaged, type: :boolean
+  option :rclone, type: :boolean
   def upload(*names)
-    require 'net/sftp'
-
     if options[:packaged]
       slugs = Dir[File.join(Docs.store_path, '*.tar.gz')].map { |f| File.basename(f, '.tar.gz') }
       docs = find_docs_by_slugs(slugs)
@@ -193,6 +192,11 @@ class DocsCLI < Thor
       puts "[S3] Syncing #{doc.path}..."
       cmd = "aws s3 sync #{File.join(Docs.store_path, doc.path)} s3://devdocs-documents/#{doc.path} --delete --profile devdocs"
       cmd << ' --dryrun' if options[:dryrun]
+      if options[:rclone]
+        puts "[S3] Syncing #{doc.path} using rclone..."
+        cmd = "rclone sync #{File.join(Docs.store_path, doc.path)} devdocs:devdocs-documents/#{doc.path} --delete-after --progress"
+        cmd << ' --dry-run' if options[:dryrun]
+      end
       system(cmd)
     end
     puts '[S3] Done syncing.'
@@ -205,6 +209,11 @@ class DocsCLI < Thor
       puts "[S3 bundle] Uploading #{filename}..."
       cmd = "aws s3 cp #{File.join(Docs.store_path, filename)} s3://devdocs-downloads/#{filename} --profile devdocs"
       cmd << ' --dryrun' if options[:dryrun]
+      if options[:rclone]
+        puts "[S3 bundle] Uploading #{filename} using rclone..."
+        cmd = "rclone copy #{File.join(Docs.store_path, filename)} devdocs:devdocs-downloads/ --s3-no-check-bucket"
+        cmd << ' --dry-run' if options[:dryrun]
+      end
       system(cmd)
     end
     puts '[S3 bundle] Done uploading.'
@@ -242,7 +251,7 @@ class DocsCLI < Thor
           ['index.json', 'meta.json'].each do |filename|
             json = "https://documents.devdocs.io/#{doc.path}/#{filename}?#{time}"
             begin
-              URI.open(json) do |file|
+              URI.open(json, "Accept-Encoding" => "identity") do |file|
                 mutex.synchronize do
                   path = File.join(dir, filename)
                   File.write(path, file.read)

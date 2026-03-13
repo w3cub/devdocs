@@ -13,12 +13,18 @@ module Docs
         '.communitybox',
         '#Quick_Links',
         'aside.metadata',
+        '.reference-layout__toc',
+        '.article-footer',
         'hr']
 
       BROWSER_UNNECESSARY_CLASS_REGEX = /\s*bc-browser[\w_-]+/
 
       def call
         css(*REMOVE_NODES).remove
+
+        css('.reference-layout__header', '.reference-layout__body').each do |node|
+          node.before(node.children).remove
+        end
 
         css('td.header').each do |node|
           node.name = 'th'
@@ -71,6 +77,8 @@ module Docs
           node.content = node.content
           node.remove_attribute('class')
         end
+
+        css('.example-header').remove
 
         css('table').each do |node|
           node.before %(<div class="_table"></div>)

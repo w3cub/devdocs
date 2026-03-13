@@ -5,36 +5,37 @@ module Docs
       # Generate browser compatibility table
       # Fixes "BCD tables only load in the browser"
       # https://github.com/mdn/browser-compat-data
-      # https://github.com/mdn/yari/tree/main/client/src/document/ingredients/browser-compatibility-table
+      # https://github.com/mdn/yari/tree/main/client/src/lit/compat
 
       def call
-        if at_css('#browser_compatibility') \
-          and not at_css('#browser_compatibility').next_sibling.classes.include?('warning') \
-          and not at_css('#browser_compatibility').next_sibling.content.match?('Supported')
-
-          at_css('#browser_compatibility').next_sibling.remove
-
-          compatibility_tables = generate_compatibility_table()
-          compatibility_tables.each do |table|
-            at_css('#browser_compatibility').add_next_sibling(table)
-          end
-        end
+        generate_compatibility_table()
 
         doc
       end
 
-      BROWSERS = {
+      BROWSERS_DESKTOP = {
+        # Desktop
         'chrome' => 'Chrome',
         'edge' => 'Edge',
         'firefox' => 'Firefox',
         'opera' => 'Opera',
         'safari' => 'Safari',
+      }
+      BROWSERS_MOBILE = {
+        # Mobile
         'chrome_android' => 'Chrome Android',
         'firefox_android' => 'Firefox for Android',
         'opera_android' => 'Opera Android',
         'safari_ios' => 'Safari on IOS',
         'samsunginternet_android' => 'Samsung Internet',
         'webview_android' => 'WebView Android',
+        'webview_ios' => 'WebView on iOS',
+      }
+      BROWSERS_SERVER = {
+        # Server
+        'bun' => 'Bun',
+        'deno' => 'Deno',
+        'nodejs' => 'Node.js',
       }
 
       def is_javascript
@@ -43,36 +44,28 @@ module Docs
 
       def browsers
         if is_javascript
-          {}.merge(BROWSERS).merge({'deno' => 'Deno', 'nodejs' => 'Node.js'})
+          {}.merge(BROWSERS_DESKTOP).merge(BROWSERS_MOBILE).merge(BROWSERS_SERVER)
         else
-          BROWSERS
+          {}.merge(BROWSERS_DESKTOP).merge(BROWSERS_MOBILE)
         end
       end
 
       def browser_types
         if is_javascript
-          {'Desktop'=>6, 'Mobile'=>6, 'Server'=>2,}
+          {'Desktop'=>BROWSERS_DESKTOP.length, 'Mobile'=>BROWSERS_MOBILE.length, 'Server'=>BROWSERS_SERVER.length,}
         else
-          {'Desktop'=>6, 'Mobile'=>6,}
+          {'Desktop'=>BROWSERS_DESKTOP.length, 'Mobile'=>BROWSERS_MOBILE.length,}
         end
       end
 
       def generate_compatibility_table()
-        json_files_uri = request_bcd_uris()
-
-        compat_tables = []
-
-        json_files_uri.each do |uri|
-          compat_tables.push(generate_compatibility_table_wrapper(uri))
+        css('mdn-compat-table-lazy').each do |node|
+          file = node.attr('query')
+          # https://github.com/mdn/browser-compat-data/blob/main/javascript/builtins/Set.json
+          # https://bcd.developer.mozilla.org/bcd/api/v0/current/javascript.builtins.Set.json
+          uri = "https://bcd.developer.mozilla.org/bcd/api/v0/current/#{file}.json"
+          node.replace generate_compatibility_table_wrapper(uri)
         end
-
-        return compat_tables
-      end
-
-      def request_bcd_uris
-        hydration = JSON.load at_css('#hydration').text
-        files = hydration['doc']['browserCompat'] || []
-        files.map { |file| "https://bcd.developer.mozilla.org/bcd/api/v0/current/#{file}.json" }
       end
 
       def generate_compatibility_table_wrapper(url)
@@ -145,76 +138,51 @@ module Docs
         version_removed = []
         notes = []
 
-        if json
-          if json.is_a?(Array)
-            json.each do |element|
-
-              if element['version_added']
-                version_added.push(element['version_added'])
-              else
-                version_added.push(false)
-              end
-
-              if element['version_removed']
-                version_removed.push(element['version_removed'])
-              else
-                version_removed.push(false)
-              end
-
-              if element['notes']
-                notes.push(element['notes'])
-              else
-                notes.push(false)
-              end
-
-            end
-          else
-            version_added.push(json['version_added'])
-            version_removed.push(json['version_removed'])
-            notes.push(json['notes'])
-          end
-
-          version_added.map! do |version|
-            if version == true
-              'Yes'
-            elsif version == false
-              'No'
-            elsif version.is_a?(String)
-              version
-            else
-              '?'
-            end
-          end
-
-          if version_removed[0]
-            format_string = "<td class=bc-supports-no>"
-          elsif version_added[0] == 'No'
-            format_string = "<td class=bc-supports-no>"
-          elsif version_added[0] == '?'
-            format_string = "<td class=bc-supports-unknown>"
-          else
-            format_string = "<td class=bc-supports-yes>"
-          end
-
-          for value in (0..version_added.length-1) do
-            if version_removed[value]
-              version_string = "#{version_added[value]}–#{version_removed[value]}"
-            else
-              version_string = version_added[value]
-            end
-
-            if notes[value]
-              format_string += "<details><summary>#{version_string}</summary>#{notes[value]}</details>"
-            else
-              format_string += "<div>#{version_string}</div>"
-            end
-          end
-
-          format_string += "</td>"
-
-        else
+        if !json
           format_string = "<td class=bc-supports-unknown><div>?</div></td>"
+          entry.add_child(format_string)
+          return
         end
+
+        format_string = "<td class=bc-supports-unknown>"
+        (json.is_a?(Array) ? json : [json]).each do |element|
+          version = element['version_added']
+          if version.is_a?(String) and element['release_date']
+            format_string = "<td class=bc-supports-yes>"
+            format_string = "<td class=bc-supports-preview>" if element['release_date'] > Time.now.iso8601
+            version_added.push("<abbr title='Release date: #{element['release_date']}'>#{version}</abbr>")
+          elsif version == 'preview'
+            format_string = "<td class=bc-supports-preview>"
+            version_added.push(version)
+          elsif version.is_a?(String)
+            format_string = "<td class=bc-supports-yes>"
+            version_added.push(version)
+          elsif version == true
+            format_string = "<td class=bc-supports-yes>"
+            version_added.push('Yes')
+          else
+            format_string = "<td class=bc-supports-no>"
+            version_added.push('No')
+          end
+          version_removed.push(element['version_removed'] || false)
+          notes.push(element['notes'] || false)
+        end
+
+        for value in (0..version_added.length-1) do
+          if version_removed[value]
+            version_string = "#{version_added[value]}–#{version_removed[value]}"
+          else
+            version_string = version_added[value]
+          end
+
+          if notes[value]
+            format_string += "<details><summary>#{version_string}</summary>#{notes[value]}</details>"
+          else
+            format_string += "<div>#{version_string}</div>"
+          end
+        end
+
+        format_string += "</td>"
 
         entry.add_child(format_string)
       end

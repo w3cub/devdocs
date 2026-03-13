@@ -1,57 +1,61 @@
 module Docs
   class Pytorch
     class EntriesFilter < Docs::EntriesFilter
-      NAME_REPLACEMENTS = {
-        "Distributed communication package - torch.distributed" => "torch.distributed"
-      }
+      def get_breadcrumbs
+        breadcrumbs = if at_css('.pytorch-breadcrumbs')
+          css('.pytorch-breadcrumbs > li').map { |node|
+            node.content.delete_suffix(' >').strip
+          }
+        else
+          css('.bd-breadcrumbs > li').map { |node|
+            text = node.content.strip
+            text.empty? && node.at_css('.fa-home') ? 'Docs' : text
+          }
+        end.reject { |item| item.nil? || item.empty? }
 
-      def get_breadcrumbs()
-        css('.pytorch-breadcrumbs > li').map { |node| node.content.delete_suffix(' >') }
+        if breadcrumbs.last&.end_with?('.')
+          resolved_name = at_css('h1').content.delete_suffix('#').strip
+          breadcrumbs[-1] = resolved_name
+        end
+
+        breadcrumbs
       end
 
       def get_name
-        # The id of the container `div.section` indicates the page type.
-        # If the id starts with `module-`, then it's an API reference,
-        # otherwise it is a note or design doc.
-        section_id = at_css('.section[id], section[id]')['id']
-        if section_id.starts_with? 'module-'
-          section_id.remove('module-')
-        else
-          name = get_breadcrumbs()[1]
-          NAME_REPLACEMENTS.fetch(name, name)
-        end
+        get_breadcrumbs[-1]
       end
 
       def get_type
-        name
+        if at_css('.pytorch-breadcrumbs')
+          get_breadcrumbs[1]
+        else
+          get_breadcrumbs.size > 2 ? get_breadcrumbs[2] : get_breadcrumbs[1]
+        end
       end
 
       def include_default_entry?
-        # Only include API references, and ignore notes or design docs
-        !subpath.start_with? 'generated/' and type.start_with? 'torch'
+        !get_breadcrumbs.nil? && get_breadcrumbs.size >= 2
       end
 
       def additional_entries
         return [] if root_page?
 
         entries = []
-
-        css('dt').each do |node|
-          name = node['id']
-          if name == self.name or name == nil
+        css('dl').each do |node|
+          dt = node.at_css('dt')
+          if dt == nil
+            next
+          end
+          id = dt['id']
+          if id == name or id == nil
             next
           end
 
-          case node.parent['class']
-          when 'method', 'function'
-            if node.at_css('code').content.starts_with? 'property '
-              # this instance method is a property, so treat it as an attribute
-              entries << [name, node['id']]
-            else
-              entries << [name + '()', node['id']]
-            end
-          when 'class', 'attribute'
-            entries << [name, node['id']]
+          case node['class']
+          when 'py method', 'py function'
+            entries << [id + '()', id]
+          when 'py class', 'py attribute', 'py property'
+            entries << [id, id]
           end
         end
 

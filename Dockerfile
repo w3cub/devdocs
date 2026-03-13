@@ -1,4 +1,4 @@
-FROM ruby:3.3.0
+FROM ruby:3.4.7
 ENV LANG=C.UTF-8
 ENV ENABLE_SERVICE_WORKER=true
 
@@ -11,7 +11,8 @@ RUN apt-get update && \
 
 COPY Gemfile Gemfile.lock Rakefile /devdocs/
 
-RUN bundle install --system && \
+RUN bundle config set path.system true && \
+    bundle install && \
     rm -rf ~/.gem /root/.bundle/cache /usr/local/bundle/cache
 
 COPY . /devdocs

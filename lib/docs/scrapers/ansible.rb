@@ -11,7 +11,7 @@ module Docs
 
     options[:attribution] = <<-HTML
       &copy; 2012&ndash;2018 Michael DeHaan<br>
-      &copy; 2018&ndash;2021 Red Hat, Inc.<br>
+      &copy; 2018&ndash;2025 Red Hat, Inc.<br>
       Licensed under the GNU General Public License version 3.
     HTML
 
@@ -33,6 +33,7 @@ module Docs
     ]
 
     version do
+      # 2025-08-14
       self.base_url = "https://docs.ansible.com/ansible/latest/"
     end
 

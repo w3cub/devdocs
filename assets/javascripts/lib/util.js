@@ -340,8 +340,8 @@ $.scrollToWithImageLock = function (el, parent, ...args) {
 
 // Calls the function while locking the element's position relative to the window.
 $.lockScroll = function (el, fn) {
-  let parent;
-  if ((parent = $.scrollParent(el))) {
+  const parent = $.scrollParent(el);
+  if (parent) {
     let { top } = $.rect(el);
     if (![document.body, document.documentElement].includes(parent)) {
       top -= $.rect(parent).top;
@@ -352,6 +352,16 @@ $.lockScroll = function (el, fn) {
     fn();
   }
 };
+
+// If `el` is inside any `<details>` elements, expand them.
+$.openDetailsAncestors = function (el) {
+  while (el) {
+    if (el.tagName === "DETAILS") {
+      el.open = true;
+    }
+    el = el.parentElement;
+  }
+}
 
 let smoothScroll =
   (smoothStart =
@@ -457,13 +467,13 @@ $.noop = function () {};
 
 $.popup = function (value) {
   try {
+    window.open(value.href || value, "_blank", "noopener");
+  } catch (error) {
     const win = window.open();
     if (win.opener) {
       win.opener = null;
     }
     win.location = value.href || value;
-  } catch (error) {
-    window.open(value.href || value, "_blank");
   }
 };
 
@@ -525,22 +535,4 @@ $.highlight = function (el, options) {
   options = { ...HIGHLIGHT_DEFAULTS, ...(options || {}) };
   el.classList.add(options.className);
   setTimeout(() => el.classList.remove(options.className), options.delay);
-};
-
-$.copyToClipboard = function (string) {
-  let result;
-  const textarea = document.createElement("textarea");
-  textarea.style.position = "fixed";
-  textarea.style.opacity = 0;
-  textarea.value = string;
-  document.body.appendChild(textarea);
-  try {
-    textarea.select();
-    result = !!document.execCommand("copy");
-  } catch (error) {
-    result = false;
-  } finally {
-    document.body.removeChild(textarea);
-  }
-  return result;
 };

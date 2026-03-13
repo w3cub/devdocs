@@ -4,14 +4,14 @@ module Docs
     self.slug = 'vite'
     self.type = 'simple'
     self.links = {
-      home: 'https://vitejs.dev/',
+      home: 'https://vite.dev/',
       code: 'https://github.com/vitejs/vite'
     }
 
     options[:root_title] = 'Vite'
 
     options[:attribution] = <<-HTML
-      &copy; 2019–present, Yuxi (Evan) You and Vite contributors<br>
+      &copy; 2019-present, VoidZero Inc. and Vite contributors<br>
       Licensed under the MIT License.
     HTML
 
@@ -22,18 +22,28 @@ module Docs
     html_filters.push 'vite/entries', 'vite/clean_html'
 
     version do
-      self.release = '5.0.11'
-      self.base_url = 'https://vitejs.dev/'
+      self.release = '7.3.1'
+      self.base_url = 'https://vite.dev/'
+    end
+
+    version '6' do
+      self.release = '6.3.5'
+      self.base_url = 'https://v6.vite.dev/'
+    end
+
+    version '5' do
+      self.release = '5.4.11'
+      self.base_url = 'https://v5.vite.dev/'
     end
 
     version '4' do
-      self.release = '4.5.1'
-      self.base_url = 'https://v4.vitejs.dev/'
+      self.release = '4.5.5'
+      self.base_url = 'https://v4.vite.dev/'
     end
 
     version '3' do
-      self.release = '3.2.5'
-      self.base_url = 'https://v3.vitejs.dev/'
+      self.release = '3.2.11'
+      self.base_url = 'https://v3.vite.dev/'
     end
 
     def get_latest_version(opts)
